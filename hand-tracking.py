@@ -51,7 +51,10 @@ hand=mp.solutions.hands
 hand_obj=hand.Hands(max_num_hands=1)
 drawing=mp.solutions.drawing_utils
 
+start_init=False 
+
 while True:
+    end_time=time.time()
     success,frame=cap.read()
     frame=cv2.flip(frame,1)
 
@@ -64,23 +67,27 @@ while True:
         diff_x=abs(hand_keyPoints.landmark[0].x-hand_keyPoints.landmark[8].x)
         if diff_y<diff_x:
             direction=handDirection(hand_keyPoints)
-            moveServo(direction)
-            if direction=='right':
-                print('right')
-            elif direction=='left':
-                print('left')
-            elif direction=='up':
-                print('up')
-            elif direction=='down':
-                print('down')
-            elif direction=='up-right':
-                print('up-right')
-            elif direction=='down-right':
-                print('down-right')
-            elif direction=='up-left':
-                print('up-left')
-            elif direction=='down-left':
-                print('down-left')
+            if not(start_init):
+                start_time=time.time()
+                start_init=True
+            elif (end_time-start_time)>0.1:
+                if direction=='right':
+                    print('right')
+                elif direction=='left':
+                    print('left')
+                elif direction=='up':
+                    print('up')
+                elif direction=='down':
+                    print('down')
+                elif direction=='up-right':
+                    print('up-right')
+                elif direction=='down-right':
+                    print('down-right')
+                elif direction=='up-left':
+                    print('up-left')
+                elif direction=='down-left':
+                    print('down-left')
+                start_init=False
 
     cv2.imshow("Hand Tracking",frame)
     if cv2.waitKey(1)&0xFF==ord('q'):
